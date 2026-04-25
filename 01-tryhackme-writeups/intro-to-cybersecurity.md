@@ -12,3 +12,7 @@
 - Offensive security: finding vulnerabilities before attackers do
 - Defensive security: monitoring, detecting and responding to attacks
 - SOC teams monitor networks 24/7 for suspicious activity
+- 
+## Tools Introduced
+- OpenVPN for connecting to TryHackMe labs
+- Basic Linux terminal navigation
