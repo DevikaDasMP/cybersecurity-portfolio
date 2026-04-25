@@ -1,6 +1,6 @@
-# cybersecurity-portfolio
-## About Me
-MSc Cyber Security graduate (University of Hertfordshire, 2024) with 3 years of IT application support experience. Currently building hands-on cybersecurity skills and working towards CompTIA Security+.
+# Devika's Cybersecurity Portfolio
+
+Welcome to my cybersecurity portfolio! I am an MSc Cyber Security graduate actively transitioning into a cybersecurity career, documenting my learning journey and hands-on projects here.
 
 ## Skills
 - Incident Management | ServiceNow | Network Fundamentals | Python (basic) | Windows OS
