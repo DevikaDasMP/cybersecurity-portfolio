@@ -1,144 +1,167 @@
 # TryHackMe Writeup: Network Fundamentals
 
 **Platform:** TryHackMe — Pre-Security Path
-**Status:** ✅ Completed
-**Difficulty:** Easy
-**Date Completed:** April 2026
+**Rooms Covered:** What is Networking? | Intro to LAN | OSI Model | Packets and Frames | Extending Your Network
+**Status:** ✅ Completed | **Date:** April 2026
 
 ---
 
 ## Overview
-
-The Network Fundamentals module covers the core concepts of how networks work, how devices communicate, and the protocols that underpin the internet.
-This is foundational knowledge for any cybersecurity professional, particularly for SOC Analyst roles where network traffic analysis is a daily task.
+The Network Fundamentals section builds a complete understanding of how computer networks work — from basic connectivity to how data travels across networks and how networks are extended to the internet. Essential knowledge for any SOC Analyst role.
 
 ---
 
-## What I Learned
+## Room 1: What is Networking?
 
-### 1. What is Networking?
-- A network is a collection of devices connected together to share data and resources
-- Networks can be private (LAN — Local Area Network) or public (WAN — Wide Area Network)
-- The internet is essentially a massive WAN connecting millions of devices globally
-- Devices on a network are identified by their **IP address** and **MAC address**
+### What is a Network?
+- A network connects two or more devices to share data and resources
+- The internet is the world's largest network — billions of interconnected devices
+- Networks can be private (home/office LAN) or public (internet)
 
-### 2. IP Addresses
-- An IP (Internet Protocol) address is a unique numerical label assigned to every device on a network
-- **IPv4** format: 192.168.1.1 — 4 sets of numbers separated by dots (0–255)
-- **IPv4** is running out of available addresses due to the massive growth of internet-connected devices
-- **IPv6** was created to solve this — it uses a longer alphanumeric format (e.g. 2001:0db8:85a3:0000:0000:8a2e:0370:7334)
-- **Public IP** — visible on the internet, assigned by your ISP
-- **Private IP** — used within a local network (e.g. 192.168.x.x)
+### IP Addresses
+- Every device gets an IP (Internet Protocol) address for identification
+- **IPv4:** Four sets of numbers e.g. 192.168.1.1
+- **IPv6:** Longer alphanumeric format — created because IPv4 addresses are running out
+- **Public IP** — visible on the internet | **Private IP** — used within a local network only
 
-### 3. MAC Addresses
-- A MAC (Media Access Control) address is a unique hardware identifier assigned to a network interface
-- Format: 12 hexadecimal characters (e.g. a4:c3:f0:85:ac:2d)
-- Unlike IP addresses, MAC addresses are permanent and tied to the physical device
-- MAC addresses operate at Layer 2 (Data Link Layer) of the OSI model
+### MAC Addresses
+- Unique hardware identifier permanently assigned to a network interface
+- Format: 12 hexadecimal characters e.g. a4:c3:f0:85:ac:2d
+- Used for communication within a local network (Layer 2)
+- Can be spoofed by attackers to bypass network access controls
 
-### 4. The OSI Model
-The OSI (Open Systems Interconnection) model is a framework that describes how data is transmitted across a network in 7 layers:
+### Ping
+- Tests connectivity between two devices using ICMP protocol
+- Command: `ping <IP address or domain>`
+- **Security relevance:** Attackers use ping sweeps during reconnaissance to discover active hosts
 
-| Layer | Name | Function | Example |
+---
+
+## Room 2: Intro to LAN
+
+### Network Topologies
+- **Star** — all devices connect to a central switch. Most common. Central device = single point of failure
+- **Bus** — all devices share one cable. Simple but inefficient
+- **Ring** — devices connected in a loop. Data travels in one direction
+
+### Key Devices
+- **Switch** — connects devices within a LAN using MAC addresses. Sends traffic only to the intended device
+- **Router** — connects different networks together using IP addresses. Routes traffic between your LAN and the internet
+
+### Subnetting
+- Divides a large network into smaller segments
+- Example: 192.168.1.0/24 — /24 means first 24 bits identify the network
+- **Security benefit:** Limits attacker lateral movement if one segment is compromised
+
+### ARP (Address Resolution Protocol)
+- Maps IP addresses to MAC addresses within a local network
+- Device broadcasts "who has this IP?" — matching device responds with its MAC
+- **ARP spoofing attack:** Attacker sends fake ARP replies to intercept traffic (man-in-the-middle)
+
+### DHCP
+- Automatically assigns IP addresses to devices joining a network
+- **Security risk:** Rogue DHCP servers can redirect traffic through an attacker's machine
+
+---
+
+## Room 3: OSI Model
+
+The OSI model is a 7-layer framework describing how data travels across a network:
+
+| Layer | Name | Function | Examples |
 |-------|------|----------|---------|
-| 7 | Application | Interface for end-user applications | HTTP, FTP, DNS |
-| 6 | Presentation | Data formatting, encryption | SSL/TLS |
-| 5 | Session | Managing sessions between devices | NetBIOS |
-| 4 | Transport | Reliable data transfer, error checking | TCP, UDP |
-| 3 | Network | Logical addressing and routing | IP |
-| 2 | Data Link | Physical addressing (MAC) | Ethernet |
-| 1 | Physical | Physical transmission of data | Cables, Wi-Fi |
+| 7 | Application | End-user applications | HTTP, DNS, FTP |
+| 6 | Presentation | Formatting, encryption | SSL/TLS |
+| 5 | Session | Managing sessions | NetBIOS |
+| 4 | Transport | Reliable delivery, flow control | TCP, UDP |
+| 3 | Network | Logical addressing, routing | IP, ICMP |
+| 2 | Data Link | MAC addressing, error detection | Ethernet, ARP |
+| 1 | Physical | Raw binary transmission | Cables, Wi-Fi |
 
-**Security relevance:** Understanding which layer an attack operates on helps analysts identify the right mitigation. 
-For example, a DDoS attack operates at Layer 3/4, while phishing attacks target Layer 7.
+### TCP vs UDP
+| | TCP | UDP |
+|-|-----|-----|
+| Type | Connection-oriented | Connectionless |
+| Reliability | Guaranteed delivery | No guarantee |
+| Speed | Slower | Faster |
+| Uses | Web, email, file transfer | DNS, streaming, gaming |
 
-### 5. TCP/IP Model
-- A simplified 4-layer version of OSI used in practice
-- Layers: Application → Transport → Internet → Network Access
-- **TCP (Transmission Control Protocol)** — reliable, connection-based, uses 3-way handshake (SYN, SYN-ACK, ACK)
-- **UDP (User Datagram Protocol)** — faster but unreliable, no handshake, used for streaming and DNS
+### TCP Three-Way Handshake
+- **SYN** → client requests connection
+- **SYN-ACK** → server acknowledges
+- **ACK** → client confirms — connection established
+- **Security relevance:** SYN flood attacks send thousands of SYN requests without completing the handshake, overwhelming the server
 
-### 6. Packets and Frames
-- Data is broken into smaller units called **packets** for transmission
-- Each packet contains a **header** (source/destination IP, protocol) and a **payload** (the actual data)
+### Security Relevance of OSI
+- Layer 3: IP spoofing, DDoS
+- Layer 4: SYN flood attacks
+- Layer 7: SQL injection, XSS, phishing
+- Understanding the layer an attack targets guides the right mitigation
+
+---
+
+## Room 4: Packets and Frames
+
+### Packets
+- Data is broken into smaller units called packets for transmission
+- Each packet has a **header** (source/destination IP, protocol) and **payload** (the actual data)
+- Packets may travel different routes and are reassembled at the destination
+
+### Frames
 - Frames operate at Layer 2 and contain MAC address information
-- **Security relevance:** SOC analysts analyse packets using tools like Wireshark to detect malicious traffic
+- A packet is wrapped inside a frame for local network transmission
+- When crossing a router, the frame is stripped and rebuilt with new MAC addresses
 
-### 7. Key Protocols
-| Protocol | Port | Purpose |
-|----------|------|---------|
-| HTTP | 80 | Web traffic (unencrypted) |
-| HTTPS | 443 | Secure web traffic (encrypted via TLS) |
-| FTP | 21 | File transfer |
-| SSH | 22 | Secure remote access |
-| DNS | 53 | Domain name resolution |
-| RDP | 3389 | Remote Desktop Protocol |
-| SMTP | 25 | Email sending |
-| SMB | 445 | File sharing (Windows) |
-
-**Security relevance:** Knowing common ports helps analysts spot suspicious traffic.
-For example, traffic on port 4444 often indicates a Metasploit reverse shell.
-
-### 8. DNS (Domain Name System)
-- DNS acts as the phonebook of the internet
-- Converts human-readable domain names (google.com) into IP addresses (142.250.187.46)
-- **DNS Resolution Process:**
-  1. User types google.com in browser
-  2. Device checks local cache first
-  3. If not cached, query sent to DNS resolver (usually ISP)
-  4. Resolver queries root nameserver → TLD nameserver → authoritative nameserver
-  5. IP address returned to browser
-- **Security relevance:** DNS can be exploited — DNS spoofing, DNS hijacking, and DNS tunnelling are common attack techniques
-
-### 9. DHCP
-- DHCP (Dynamic Host Configuration Protocol) automatically assigns IP addresses to devices on a network
-- Without DHCP, every device would need a manually configured IP address
-- **Security relevance:** Rogue DHCP servers can be used in man-in-the-middle attacks
-
-### 10. Firewalls
-- A firewall is a security device that monitors and controls incoming and outgoing network traffic
-- Rules are set to allow or block traffic based on IP addresses, ports, and protocols
-- **Types:** Hardware firewall, Software firewall, Cloud firewall
-- **Stateful** firewalls track the state of connections; **Stateless** firewalls only check packet headers
+### Security Relevance
+- SOC analysts use **Wireshark** to capture and analyse packets
+- Suspicious traffic — unusual ports, unexpected protocols, large transfers — is detected at packet level
+- Understanding packet structure is essential for reading network logs and identifying threats
 
 ---
 
-## Key Security Concepts from This Module
+## Room 5: Extending Your Network
 
-- **Ping sweep** — scanning a range of IP addresses to find active hosts
-- **Port scanning** — identifying open ports on a target (used by both attackers and defenders)
-- **Man-in-the-Middle (MitM)** — attacker intercepts communication between two parties
-- **Packet sniffing** — capturing network traffic to analyse or steal data (tools: Wireshark, tcpdump)
+### Port Forwarding
+- Allows external devices to access services within a private network
+- Configured on the router to direct specific port traffic to an internal device
+- **Security risk:** Misconfigured port forwarding exposes internal services to the internet
+
+### Firewalls
+- Monitors and controls network traffic based on defined rules (IP, port, protocol)
+- **Stateful** — tracks connection state, more intelligent
+- **Stateless** — checks each packet in isolation
+- First line of perimeter defence — SOC analysts regularly review firewall logs
+
+### VPN (Virtual Private Network)
+- Creates an encrypted tunnel between a device and a VPN server
+- Used for secure remote access and protecting data on public Wi-Fi
+- Common types: PPTP, IPSec, OpenVPN
 
 ---
 
-## Tools Introduced
-- **Ping** — tests connectivity between two devices using ICMP
-- **Traceroute/Tracert** — shows the path packets take across a network
-- **Nmap** — network scanner for discovering hosts and open ports
+## Key Tools
+- **Ping** — connectivity testing
+- **Traceroute** — traces packet path across a network
+- **Wireshark** — packet capture and analysis (core SOC tool)
+- **Nmap** — network scanning and host discovery
 
 ---
 
-## Interview Questions I Can Now Answer
-
-**Q: What is the difference between TCP and UDP?**
-TCP is a connection-oriented protocol that uses a 3-way handshake to establish a reliable connection before data transfer. 
-UDP is connectionless and faster but does not guarantee delivery — used for DNS queries and video streaming.
+## Interview Questions
 
 **Q: What is the OSI model and why does it matter in security?**
-The OSI model is a 7-layer framework describing how data moves across a network.
-It matters in security because different attacks operate at different layers — understanding the model helps analysts identify where an attack occurred and 
-which controls to apply.
+The OSI model is a 7-layer framework describing how data moves across a network. It matters because different attacks target different layers — a SYN flood targets Layer 4 while SQL injection targets Layer 7. Understanding this helps analysts identify where an attack occurred and apply the right controls.
 
-**Q: What is DNS and how can it be abused?**
-DNS translates domain names into IP addresses. Attackers can abuse DNS through DNS spoofing (redirecting users to malicious sites), 
-DNS hijacking (taking over DNS records), or DNS tunnelling (exfiltrating data through DNS queries).
+**Q: What is the difference between TCP and UDP?**
+TCP is connection-oriented and guarantees delivery using a 3-way handshake. UDP is faster but connectionless with no delivery guarantee. TCP is used for web browsing and email; UDP for DNS and video streaming.
+
+**Q: What is ARP spoofing?**
+ARP maps IP addresses to MAC addresses on a local network. In ARP spoofing, an attacker sends fake ARP replies to associate their MAC address with a legitimate IP, allowing them to intercept network traffic in a man-in-the-middle attack.
+
+**Q: What is subnetting and why is it important?**
+Subnetting divides a large network into smaller segments. Security-wise it limits lateral movement — if one subnet is compromised, attackers cannot easily access devices on other subnets.
 
 ---
 
 ## Reflection
-Network fundamentals is essential knowledge for any SOC analyst. Understanding how traffic flows, how protocols work, and how devices communicate 
-is the foundation for analysing network logs, detecting anomalies, and responding to threats. I will build on this knowledge through Wireshark practice
-and the TryHackMe SOC Level 1 path.
-
-
+Network fundamentals is the most critical foundational topic for a SOC Analyst. Every security alert travels across a network. Understanding how networks are structured, how data flows, and how devices communicate gives me the foundation to analyse network logs, detect anomalies, and understand attacker movement. I will build on this through Wireshark practice and the TryHackMe SOC Level 1 path.
