@@ -1,8 +1,11 @@
 # TryHackMe Writeup: Computer Fundamentals
 
 **Platform:** TryHackMe — Pre-Security Path
+
 **Status:** ✅ Completed
+
 **Difficulty:** Easy
+
 **Date Completed:** April 2026
 
 ---
