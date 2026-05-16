@@ -1,7 +1,9 @@
 # TryHackMe Writeup: Computer Fundamentals
 
 **Platform:** TryHackMe — Pre-Security Path
+
 **Rooms Covered:** Inside a Computer System | Computer Types | Client Server Basics | Virtualisation Basics | Cloud Computing Fundamentals
+
 **Status:** ✅ Completed
 
 ---
