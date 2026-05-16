@@ -1,8 +1,10 @@
 # TryHackMe Writeup: How the Web Works
 
 **Platform:** TryHackMe — Pre-Security Path
+
 **Rooms Covered:** DNS in Detail | HTTP in Detail | How Websites Work | Putting It All Together
-**Status:** ✅ Completed | **Date:** April 2026
+
+**Status:** ✅ Completed
 
 ---
 
