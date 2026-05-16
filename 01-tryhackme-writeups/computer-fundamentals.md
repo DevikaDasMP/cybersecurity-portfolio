@@ -1,161 +1,186 @@
 # TryHackMe Writeup: Computer Fundamentals
 
 **Platform:** TryHackMe — Pre-Security Path
-
+**Rooms Covered:** Inside a Computer System | Computer Types | Client Server Basics | Virtualisation Basics | Cloud Computing Fundamentals
 **Status:** ✅ Completed
-
-**Difficulty:** Easy
-
-**Date Completed:** April 2026
 
 ---
 
 ## Overview
-
-The Computer Fundamentals module covers how computers work at a fundamental level — hardware components, operating systems, file systems, and basic concepts that underpin all of computing. For cybersecurity professionals, this knowledge is essential for understanding how attackers exploit systems and how defenders protect them.
+The Computer Fundamentals section covers how computers are built from the inside out, the different types of computers that exist in the world, how devices communicate with each other over the internet, and how modern IT infrastructure uses virtualisation and cloud computing to deliver scalable and flexible services. This knowledge is foundational for understanding how cyberattacks target systems and how defenders protect them.
 
 ---
 
-## What I Learned
+## Room 1: Inside a Computer System
 
-### 1. Core Hardware Components
+### Core Components
+Every computer system is made up of key hardware components that work together:
+
 | Component | Function | Security Relevance |
 |-----------|----------|-------------------|
-| CPU (Central Processing Unit) | Processes instructions | Spectre/Meltdown vulnerabilities exploit CPU design flaws |
-| RAM (Random Access Memory) | Temporary storage for running processes | Malware often runs in RAM — memory forensics can detect it |
-| Storage (HDD/SSD) | Permanent data storage | Where files, logs, and evidence are stored |
-| Motherboard | Connects all components | BIOS/UEFI firmware can be targeted by rootkits |
-| GPU | Processes graphics | Can be used for password cracking (parallel processing) |
-| NIC (Network Interface Card) | Connects device to network | MAC address spoofing targets the NIC |
+| CPU | Processes all instructions | Spectre/Meltdown exploit CPU design |
+| RAM | Temporary storage for running programs | Malware runs in RAM — memory forensics detects it |
+| Storage (HDD/SSD) | Permanent data storage | Where logs, files, and malware persist |
+| Motherboard | Connects all components | BIOS/UEFI firmware targeted by rootkits |
+| GPU | Processes graphics | Used for password cracking |
+| NIC | Connects device to network | MAC address spoofing targets the NIC |
 
-### 2. How a Computer Boots
-1. Power button pressed — power supplied to motherboard
-2. **BIOS/UEFI** runs POST (Power-On Self-Test) — checks hardware
-3. Bootloader located (usually on storage drive)
+### The Boot Process
+The boot process is the sequence a computer follows when it powers on:
+
+1. Power supplied to the motherboard
+2. **BIOS/UEFI** runs POST (Power-On Self-Test) — checks all hardware
+3. Bootloader located on the storage drive
 4. Operating system kernel loaded into RAM
 5. OS initialises services and processes
-6. Login screen presented to user
+6. Login screen presented to the user
 
-**Security relevance:** Attackers can target the boot process with **bootkit** malware — malicious code that loads before the OS, making it very hard to detect and remove.
-
-### 3. Operating Systems
-- An OS manages hardware resources and provides services for applications
-- **Main OS types:** Windows, Linux, macOS
-- **Key OS functions:** Process management, memory management, file system management, security controls, user management
-
-**Windows vs Linux in Security:**
-| Feature | Windows | Linux |
-|---------|---------|-------|
-| Market share | Dominant in enterprise | Dominant in servers |
-| Attack target | Most targeted by malware | Less targeted but not immune |
-| CLI | PowerShell, CMD | Bash |
-| File system | NTFS | ext4, XFS |
-| Logs location | Event Viewer | /var/log/ |
-
-### 4. File Systems
-- A file system organises and stores data on a storage device
-- **NTFS (Windows)** — supports permissions, encryption, journaling
-- **FAT32** — older, limited file size, used on USB drives
-- **ext4 (Linux)** — most common Linux file system
-- **File paths:**
-  - Windows: `C:\Users\Devika\Documents\file.txt`
-  - Linux: `/home/devika/documents/file.txt`
-
-**Security relevance:** Understanding file systems is critical for digital forensics — investigators examine file metadata, deleted files, and access timestamps to build evidence.
-
-### 5. Processes and Services
-- A **process** is a running instance of a program
-- Every process has a **PID (Process ID)**
-- **Services** are background processes that run without user interaction
-- **Windows Task Manager** and **Linux ps/top commands** show running processes
-
-**Security relevance:** Malware often disguises itself as a legitimate process. SOC analysts examine running processes to identify suspicious activity — for example, a process called `svchost.exe` running from an unusual location is a red flag.
-
-### 6. Users and Permissions
-- Operating systems use user accounts to control access to resources
-- **Principle of Least Privilege** — users should only have the minimum permissions needed to do their job
-- **Windows permission levels:** Standard User, Administrator
-- **Linux permission levels:** Regular user, sudo (superuser), root
-
-**File permissions in Linux:**
-```
--rwxr-xr-x  1  devika  devika  4096  May 2026  file.sh
-```
-- `r` = read, `w` = write, `x` = execute
-- First 3 characters = owner permissions
-- Next 3 = group permissions
-- Last 3 = other/world permissions
-
-**Security relevance:** Misconfigured permissions are a common vulnerability. Attackers look for files with excessive permissions to escalate privileges.
-
-### 7. Virtualisation
-- Virtualisation allows multiple operating systems to run on a single physical machine
-- A **hypervisor** manages virtual machines (VMs)
-- **Type 1 hypervisor** (bare metal) — runs directly on hardware (VMware ESXi, Hyper-V)
-- **Type 2 hypervisor** — runs on top of an OS (VirtualBox, VMware Workstation)
-
-**Security uses of virtualisation:**
-- Creating isolated lab environments for malware analysis
-- Running TryHackMe attack/defence labs safely
-- Sandboxing suspicious files to observe behaviour without risking the host machine
-- Snapshot and rollback — restore a clean state after testing
-
-### 8. Command Line Basics (Windows)
-| Command | Function |
-|---------|----------|
-| `dir` | List files in directory |
-| `cd` | Change directory |
-| `ipconfig` | Show network configuration |
-| `netstat` | Show network connections |
-| `tasklist` | Show running processes |
-| `systeminfo` | Show system information |
-| `ping` | Test connectivity |
-| `whoami` | Show current user |
-
-### 9. Binary and Hexadecimal
-- Computers process data in **binary** (0s and 1s)
-- **1 bit** = single 0 or 1
-- **1 byte** = 8 bits
-- **Hexadecimal** is base-16, used as a human-readable representation of binary data
-- Hex is used extensively in malware analysis, memory forensics, and network packet analysis
-
-**Security relevance:** Understanding binary and hex is essential for reading packet captures, analysing malware signatures, and working with hashes.
-
-### 10. Hashing
-- A hash is a fixed-length output generated from input data using a hashing algorithm
-- **Common algorithms:** MD5, SHA-1, SHA-256
-- Hashes are one-way — you cannot reverse a hash to get the original data
-- Even a tiny change in input produces a completely different hash (avalanche effect)
-
-**Security uses of hashing:**
-- Storing passwords securely (never store plain text)
-- Verifying file integrity — if the hash changes, the file has been modified
-- Identifying malware — known malware files have known hash values (threat intelligence feeds)
+**Security relevance:** The boot process is sometimes targeted by hackers. **Bootkits** are malware that load before the operating system — making them extremely difficult to detect and remove. Understanding the boot sequence helps defenders identify firmware-level tampering.
 
 ---
 
-## Tools Introduced
-- **Windows Task Manager** — viewing and managing running processes
-- **VirtualBox** — free Type 2 hypervisor for creating virtual machines
-- **Kali Linux** — security-focused Linux distribution used by penetration testers and SOC analysts
+## Room 2: Computer Types
+
+### The Eight Types of Computers
+Computers come in many forms — from devices you can see to silent chips embedded in everyday objects:
+
+| Type | Description | Example |
+|------|-------------|---------|
+| Personal Computer | General purpose desktop or laptop | Home and office use |
+| Server | Provides services to other computers | Web servers, file servers |
+| Mainframe | Large systems for massive data processing | Banking and government |
+| Supercomputer | Extremely fast, complex calculations | Weather forecasting |
+| Embedded Computer | Built into other devices, often invisible | Traffic lights, medical devices |
+| Microcontroller | Tiny chip controlling a single function | Coffee machines, door locks |
+| Smartphone | Portable personal computer | iOS and Android devices |
+| IoT Device | Internet-connected smart devices | Smart home devices, sensors |
+
+### Key Insight
+As the room concluded: *"The most critical computers are not always the fastest or flashiest. Sometimes, they are the silent chips that keep doors opening, planes flying, and coffee machines brewing."*
+
+**Security relevance:** IoT and embedded devices are increasingly targeted by attackers because they often have weak security controls and limited update capabilities. Understanding the diversity of computer types helps security professionals assess the full attack surface of an organisation.
 
 ---
 
-## Interview Questions I Can Now Answer
+## Room 3: Client Server Basics
 
-**Q: What is the principle of least privilege?**
-The principle of least privilege means that users, processes, and systems should only have the minimum level of access required to perform their function. This limits the damage an attacker can do if they compromise an account — they cannot access resources beyond what that account is permitted to use.
+### The Client-Server Model
+The client-server model describes how devices on the internet offer and consume services:
 
-**Q: What is virtualisation and how is it used in cybersecurity?**
-Virtualisation allows multiple operating systems to run on a single physical machine using a hypervisor. In cybersecurity, it is used to create isolated lab environments for safely analysing malware, testing tools, and practising attack and defence techniques without risking the host system.
+- **Client** — the device that initiates communication and requests a service
+- **Server** — the device that receives the request and responds
 
-**Q: What is hashing and why is it important in security?**
-Hashing is the process of converting data into a fixed-length output using a mathematical algorithm. It is one-way — you cannot reverse it to get the original data. In security, hashing is used to store passwords securely, verify file integrity, and identify known malware through hash matching in threat intelligence feeds.
+This is similar to ordering a pizza:
+- You (the client) place an order (send a request)
+- The pizza shop (the server) delivers the pizza (sends a response)
 
-**Q: Why would a SOC analyst examine running processes?**
-Malware often disguises itself as a legitimate process or runs as an unexpected process. By examining running processes — using Task Manager on Windows or the ps command on Linux — a SOC analyst can identify suspicious processes, unusual parent-child process relationships, or processes running from unexpected locations, which can indicate compromise.
+### HTTP — A Practical Example
+HTTP (HyperText Transfer Protocol) is the protocol used for websites and follows the client-server model:
+
+**Client HTTP Request:**
+```
+GET /index.html HTTP/1.1
+Host: example.com
+```
+
+**Server HTTP Response:**
+```
+HTTP/1.1 200 OK
+Content-Type: text/html
+<html>Welcome!</html>
+```
+
+### Key Concepts
+- **Protocol** — rules that define how devices communicate
+- **Request** — the client asking for something
+- **Response** — the server replying with the requested resource
+- **Port** — numbered entry point apps use to communicate (HTTP = port 80, HTTPS = port 443)
+
+**Security relevance:** Understanding the client-server model is fundamental to web application security. Attacks like SQL injection, XSS, and man-in-the-middle attacks all exploit weaknesses in how clients and servers communicate.
+
+---
+
+## Room 4: Virtualisation Basics
+
+### What is Virtualisation?
+Virtualisation enables a single physical computer to act like multiple separate computers simultaneously. A special software layer called a **hypervisor** manages this process.
+
+### Key Terminology
+
+| Term | Definition |
+|------|-----------|
+| Virtualisation | Technology enabling one physical machine to run multiple virtual machines |
+| Hypervisor | The manager software that creates and runs virtual machines |
+| Virtual Machine (VM) | A complete virtual computer running inside a physical one |
+| Container | A lightweight isolated environment for running a single application |
+| Container Image | A pre-packaged template used to create containers consistently |
+| Network Port | A numbered entry point applications use to communicate over a network |
+
+### Key Benefits of Virtualisation
+- Cost savings — run multiple systems on one physical machine
+- Better resource usage — maximise hardware efficiency
+- Safe testing for cybersecurity — isolate malware analysis in a VM
+- Faster deployment — spin up new environments quickly
+- Flexibility and portability — move VMs between machines
+- Scalability — easily add more virtual resources
+- Centralised management — manage multiple systems from one place
+
+**Security relevance:** Virtualisation is essential in cybersecurity for creating **isolated lab environments** to safely analyse malware, test tools, and practice attack and defence techniques without risking production systems. Snapshots allow analysts to restore a clean state after testing.
+
+---
+
+## Room 5: Cloud Computing Fundamentals
+
+### What is Cloud Computing?
+Cloud computing provides flexible, scalable, and cost-effective access to computing resources over the internet — without needing to own or manage physical hardware.
+
+### Cloud Deployment Models
+
+| Model | Description |
+|-------|-------------|
+| Public Cloud | Shared cloud services accessed over the internet |
+| Private Cloud | Cloud infrastructure built exclusively for one organisation |
+| Hybrid Cloud | A combination of public and private clouds that share data |
+
+### Cloud Service Models
+
+| Model | What You Get | Example |
+|-------|-------------|---------|
+| IaaS (Infrastructure as a Service) | Rent basic computer parts like servers and storage | Amazon EC2 |
+| PaaS (Platform as a Service) | Ready-to-use environment to build and run apps | Google App Engine |
+| SaaS (Software as a Service) | Software you use online without installing anything | Gmail, Zoom |
+
+### Key Cloud Services
+- **EC2** — Amazon's cloud computers that you can quickly create, use, and resize whenever you need them
+
+### Key Benefits of Cloud Computing
+- Scalability — instantly scale resources up or down
+- On-demand self-service — provision resources without human intervention
+- Pay only for what you use — no upfront hardware costs
+- Security — major providers invest heavily in security controls
+- High availability — designed to minimise downtime
+- Global access — access resources from anywhere in the world
+
+**Security relevance:** Cloud security is one of the fastest-growing areas of cybersecurity. Key concerns include misconfigured cloud storage, identity and access management (IAM), and the shared responsibility model. SOC analysts increasingly monitor cloud environments using tools like Microsoft Sentinel and AWS Security Hub.
+
+---
+
+## Interview Questions
+
+**Q: What is virtualisation and why is it important in cybersecurity?**
+Virtualisation allows a single physical machine to run multiple virtual machines simultaneously using a hypervisor. In cybersecurity it is critical for creating isolated lab environments where analysts can safely analyse malware, test tools, and practice attack and defence techniques without risking production systems.
+
+**Q: What is the difference between IaaS, PaaS and SaaS?**
+IaaS provides raw infrastructure like servers and storage — you manage everything above that. PaaS provides a development environment — you just manage your applications. SaaS provides ready-to-use software — you manage nothing. Each model has a different shared responsibility for security.
+
+**Q: What is the client-server model?**
+The client-server model describes how devices communicate on a network — the client initiates requests and the server responds. Almost all internet communication follows this model. It is fundamental to understanding web application attacks where malicious clients send crafted requests to exploit server-side vulnerabilities.
+
+**Q: Why are IoT devices a security concern?**
+IoT and embedded devices are increasingly targeted because they often have weak or default security configurations, limited ability to receive security updates, and are connected to critical infrastructure. A compromised IoT device can provide an attacker with a foothold into a broader network.
 
 ---
 
 ## Reflection
-Computer fundamentals provide the essential building blocks for understanding how systems work and how they can be attacked or defended. Knowledge of processes, permissions, file systems, and the boot sequence is directly applicable to incident response, digital forensics, and threat hunting. I will build on this foundation through Linux and Windows specific TryHackMe rooms and hands-on lab practice.
+The Computer Fundamentals section has given me a comprehensive understanding of how computers work from the inside out — from individual hardware components through to modern cloud infrastructure. This knowledge is directly applicable to cybersecurity work: understanding how systems boot helps me recognise firmware attacks, understanding virtualisation helps me work safely in lab environments, and understanding cloud deployment models helps me assess the security posture of modern organisations. I will build on this foundation as I progress through the Operating Systems section and into the TryHackMe SOC Level 1 path.
+
