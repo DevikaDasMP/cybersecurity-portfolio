@@ -1,8 +1,10 @@
 # TryHackMe Writeup: Network Fundamentals
 
 **Platform:** TryHackMe — Pre-Security Path
+
 **Rooms Covered:** What is Networking? | Intro to LAN | OSI Model | Packets and Frames | Extending Your Network
-**Status:** ✅ Completed | **Date:** April 2026
+
+**Status:** ✅ Completed
 
 ---
 
