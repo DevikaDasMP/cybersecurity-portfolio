@@ -1,6 +1,5 @@
 # Room: Intro to Cybersecurity
-**Platform:** TryHackMe  
-**Date Completed:** April 2026  
+**Platform:** TryHackMe   
 **Difficulty:** Easy
 
 ## What I Learned
